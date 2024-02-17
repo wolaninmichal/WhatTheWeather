@@ -95,4 +95,8 @@ class InitialVC: UIViewController {
         
     }
     
+    @objc private func checkCity(){
+            viewModel.getWeather(city: locationTextField.text ?? "")
+        }
+    
 }
