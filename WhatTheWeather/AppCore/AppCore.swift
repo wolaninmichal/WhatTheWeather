@@ -17,24 +17,26 @@ class AppCore: AppCoreDelegate{
     var root: UINavigationController = .init()
 
     init(){
-        
-        let userName: String? = AppData().get(.userName)
-        let userPassword: String? = AppData().get(.userPassword)
-        
         setupBar()
         
-        if userName != nil, userPassword != nil{
-            setupInitialView(animate: false)
-        } else{
-            setupLoginView()
+        let userCity: String? = AppData().get(.userCity)
+        if let city = userCity {
+            setupWeatherResultVC(city: city)
+        } else {
+            setupInitialView()
         }
-                
     }
     
     func setupBar(){}
     
-    func setupLoginView(animate: Bool = false){
+
+    
+    func setupWeatherResultVC(city: String? = nil, animate: Bool = false){
         let vc = InitialVC()
+        if let city = city {
+            vc.viewModel.cityText = city
+            vc.viewModel.getWeather()
+        }
         root.setViewControllers([vc], animated: animate)
     }
     

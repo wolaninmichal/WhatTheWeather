@@ -34,8 +34,9 @@ final class Webservice {
 
 class WeatherService {
     var baseURL = ""
-    
     func getWeather(completion: @escaping (Result<WeatherResponse, NetworkError>) -> Void) {
+        print(baseURL)
+
         guard let url = URL(string: baseURL) else {
             completion(.failure(.invalidURL))
             return
@@ -46,6 +47,8 @@ class WeatherService {
                 let decodedData = try JSONDecoder().decode(WeatherResponse.self, from: data)
                 return decodedData
             } catch {
+                print("Error decoding weather data:", error)
+                print("Response:", String(data: data, encoding: .utf8) ?? "Unable to decode response data")
                 return nil
             }
         }

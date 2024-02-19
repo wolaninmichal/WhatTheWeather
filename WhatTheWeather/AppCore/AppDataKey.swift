@@ -8,8 +8,5 @@
 import Foundation
 
 enum AppDataKey: String, CaseIterable {
-    /// TODO::
-    case userName
-    case userPassword
-    
+    case userCity
 }

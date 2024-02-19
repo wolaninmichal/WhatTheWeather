@@ -6,30 +6,30 @@
 //
 
 import Foundation
+import Combine
 
 class InitialVM {
-
     var cityText: String = ""
-    var weatherResponse: WeatherResponse?
-    var isModalPresented = false
+    @Published var weatherResponse: WeatherResponse?
 
-    func getWeather(city: String) {
+    var cancellables = Set<AnyCancellable>()
+    func getWeather() {
         let service = WeatherService()
         service.baseURL = "https://api.openweathermap.org/data/2.5/weather?q=\(cityText.escaped())&appid=d0803efee719201d68c3bc66f0005655"
         
-        service.getWeather { result in
+        service.getWeather { [weak self] result in
+            guard let self = self else { return }
             switch result {
             case .success(let weather):
-                print(weather.name)
-                print(weather.main.humidity)
-                print(weather.main.temp)
                 DispatchQueue.main.async {
                     self.weatherResponse = weather
-                    self.isModalPresented = true
+                    AppData().set(self.cityText, for: .userCity)
                 }
             case .failure(let error):
+                print("Error z InitialVM")
                 print(error.localizedDescription)
             }
         }
     }
 }
+

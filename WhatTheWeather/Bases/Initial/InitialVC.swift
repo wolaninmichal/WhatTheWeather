@@ -41,6 +41,8 @@ class InitialVC: UIViewController {
         arrowButton?.addTarget(self, action: #selector(checkCity), for: .touchUpInside)
         
         setupViewModel()
+        setupBindings()
+
         
         setupViewBackground()
         setupViewComponents()
@@ -96,7 +98,14 @@ class InitialVC: UIViewController {
     }
     
     @objc private func checkCity(){
-            viewModel.getWeather(city: locationTextField.text ?? "")
+            viewModel.getWeather()
         }
     
+    private func setupBindings() {
+        viewModel.$weatherResponse.sink { [weak self] weatherResponse in
+            guard let self = self, let weatherResponse = weatherResponse else { return }
+            let weatherResultVC = WeatherResultViewController(weatherResponse: weatherResponse)
+            self.navigationController?.pushViewController(weatherResultVC, animated: true)
+        }.store(in: &viewModel.cancellables)
+    }
 }
