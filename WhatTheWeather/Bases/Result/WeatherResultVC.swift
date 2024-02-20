@@ -13,18 +13,21 @@ class WeatherResultViewController: UIViewController {
     private let cityNameLabel: Label
     private let temperatureLabel: Label
     private let humidityLabel: Label
+    private let conditionLabel: Label
+
     
-    var weatherResponse: WeatherResponse? {
+    var weatherModel: WeatherModel? {
         didSet {
             updateUI()
         }
     }
     
-    init(weatherResponse: WeatherResponse) {
+    init(weatherModel: WeatherModel) {
         self.cityNameLabel = Label(text: "", size: 20, alignment: .center)
         self.temperatureLabel = Label(text: "", size: 18, alignment: .center)
         self.humidityLabel = Label(text: "", size: 18, alignment: .center)
-        self.weatherResponse = weatherResponse
+        self.conditionLabel = Label(text: "", size: 18, alignment: .center)
+        self.weatherModel = weatherModel
         super.init(nibName: nil, bundle: nil)
         
         setupViewBackground()
@@ -48,11 +51,18 @@ class WeatherResultViewController: UIViewController {
         humidityLabel.textColor = UIColor(named: "background")
         temperatureLabel.textColor = UIColor(named: "background")
         cityNameLabel.textColor = UIColor(named: "background")
+        conditionLabel.textColor = UIColor(named: "background")
+        
+        view.addSubview(conditionLabel)
+        conditionLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.centerY.equalToSuperview().offset(50)
+        }
         
         view.addSubview(humidityLabel)
         humidityLabel.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.centerY.equalToSuperview().offset(50)
+            $0.centerX.equalTo(conditionLabel.snp.centerX)
+            $0.bottom.equalTo(conditionLabel.snp.top).offset(-16)
         }
         
         view.addSubview(temperatureLabel)
@@ -70,9 +80,10 @@ class WeatherResultViewController: UIViewController {
     }
 
     private func updateUI() {
-        guard let weather = weatherResponse else { return }
+        guard let weather = weatherModel else { return }
         cityNameLabel.text = weather.name
-        temperatureLabel.text = "Temperature: \(weather.main.temp)°C"
-        humidityLabel.text = "Humidity: \(weather.main.humidity)%"
+        temperatureLabel.text = weather.temperatureString
+        humidityLabel.text = weather.humidityString
+        conditionLabel.text = weather.conditionName
     }
 }

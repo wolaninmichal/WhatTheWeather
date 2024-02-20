@@ -102,9 +102,9 @@ class InitialVC: UIViewController {
         }
     
     private func setupBindings() {
-        viewModel.$weatherResponse.sink { [weak self] weatherResponse in
-            guard let self = self, let weatherResponse = weatherResponse else { return }
-            let weatherResultVC = WeatherResultViewController(weatherResponse: weatherResponse)
+        viewModel.$weatherModel.sink { [weak self] weatherModel in
+            guard let self = self, let weatherModel = weatherModel else { return }
+            let weatherResultVC = WeatherResultViewController(weatherModel: weatherModel)
             self.navigationController?.pushViewController(weatherResultVC, animated: true)
         }.store(in: &viewModel.cancellables)
     }

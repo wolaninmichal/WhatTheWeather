@@ -21,6 +21,7 @@ final class Webservice {
                 DispatchQueue.main.async {
                     if let parsedData = resource.parse(data) {
                         completion(parsedData)
+                        print(data)
                     } else {
                         completion(nil)
                     }
@@ -34,18 +35,20 @@ final class Webservice {
 
 class WeatherService {
     var baseURL = ""
-    func getWeather(completion: @escaping (Result<WeatherResponse, NetworkError>) -> Void) {
-        print(baseURL)
-
+    func getWeather(completion: @escaping (Result<WeatherModel, NetworkError>) -> Void) {
         guard let url = URL(string: baseURL) else {
             completion(.failure(.invalidURL))
             return
         }
-                
+        
         let resource = Resource(url: url) { data in
             do {
-                let decodedData = try JSONDecoder().decode(WeatherResponse.self, from: data)
-                return decodedData
+                let weatherResponse = try JSONDecoder().decode(WeatherResponse.self, from: data)
+                let weatherModel = WeatherModel(conditionId: weatherResponse.weather.first?.id ?? 0,
+                                                name: weatherResponse.name,
+                                                temp: weatherResponse.main.temp,
+                                                humiditiy: weatherResponse.main.humidity)
+                return weatherModel
             } catch {
                 print("Error decoding weather data:", error)
                 print("Response:", String(data: data, encoding: .utf8) ?? "Unable to decode response data")
