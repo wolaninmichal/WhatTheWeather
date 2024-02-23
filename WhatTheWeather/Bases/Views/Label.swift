@@ -18,10 +18,10 @@ class Label: UILabel {
         self.text = text
         self.font = UIFont(name: "PlayfairDisplay-Regular", size: size)
         self.textColor = UIColor(named: "text")
-        self.numberOfLines = 0
+        self.numberOfLines = 1
         self.textAlignment = alignment
         self.adjustsFontSizeToFitWidth = true
-        self.minimumScaleFactor = 0.5
+        self.minimumScaleFactor = 0.9
     }
     
     init(text: String? = nil,
@@ -35,6 +35,7 @@ class Label: UILabel {
         self.textAlignment = .natural
         self.adjustsFontSizeToFitWidth = true
         self.minimumScaleFactor = 0.5
+        
     }
     
     required init?(coder: NSCoder) {

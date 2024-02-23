@@ -14,6 +14,7 @@ class WeatherResultViewController: UIViewController {
     private let temperatureLabel: Label
     private let humidityLabel: Label
     private let conditionLabel: Label
+    private let conditionImage: UIImageView
 
     
     var weatherModel: WeatherModel? {
@@ -23,10 +24,11 @@ class WeatherResultViewController: UIViewController {
     }
     
     init(weatherModel: WeatherModel) {
-        self.cityNameLabel = Label(text: "", size: 20, alignment: .center)
-        self.temperatureLabel = Label(text: "", size: 18, alignment: .center)
-        self.humidityLabel = Label(text: "", size: 18, alignment: .center)
-        self.conditionLabel = Label(text: "", size: 18, alignment: .center)
+        self.cityNameLabel = Label(text: "", size: 24, alignment: .center)
+        self.temperatureLabel = Label(text: "", size: 20, alignment: .center)
+        self.humidityLabel = Label(text: "", size: 20, alignment: .center)
+        self.conditionLabel = Label(text: "", size: 20, alignment: .center)
+        self.conditionImage = UIImageView(image: nil)
         self.weatherModel = weatherModel
         super.init(nibName: nil, bundle: nil)
         
@@ -41,10 +43,13 @@ class WeatherResultViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUI()
+        print(UIScreen.main.bounds.width)
+
     }
 
     private func setupViewBackground(){
         view.backgroundColor = UIColor(named: "text")
+        conditionImage.contentMode = .scaleAspectFill
     }
     
     private func setupViewComponents(){
@@ -52,11 +57,20 @@ class WeatherResultViewController: UIViewController {
         temperatureLabel.textColor = UIColor(named: "background")
         cityNameLabel.textColor = UIColor(named: "background")
         conditionLabel.textColor = UIColor(named: "background")
+        conditionImage.tintColor = UIColor(named: "background")
+        
+        view.addSubview(conditionImage)
+        conditionImage.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.centerY.equalToSuperview().offset(50)
+            $0.width.equalTo(100)
+            $0.height.equalTo(100)
+        }
         
         view.addSubview(conditionLabel)
         conditionLabel.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.centerY.equalToSuperview().offset(50)
+            $0.centerX.equalTo(conditionImage.snp.centerX)
+            $0.bottom.equalTo(conditionImage.snp.top).offset(-16)
         }
         
         view.addSubview(humidityLabel)
@@ -85,5 +99,8 @@ class WeatherResultViewController: UIViewController {
         temperatureLabel.text = weather.temperatureString
         humidityLabel.text = weather.humidityString
         conditionLabel.text = weather.conditionName
+        conditionImage.image = UIImage(systemName: weather.conditionName)
+        conditionImage.tintColor = UIColor(named: "background")
+        
     }
 }

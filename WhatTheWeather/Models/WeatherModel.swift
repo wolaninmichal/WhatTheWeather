@@ -36,13 +36,13 @@ struct WeatherModel {
         case 800:
             return "sun.max"
         case 801:
-            return "cloud.few"
+            return "cloud"
         case 802:
-            return "cloud.scattered"
+            return "cloud"
         case 803:
-            return "cloud.broken"
+            return "cloud"
         case 804:
-            return "cloud.overcast"
+            return "cloud"
         default:
             return "cloud"
         }
